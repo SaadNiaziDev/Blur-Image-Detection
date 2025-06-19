@@ -422,6 +422,12 @@
                         <input type="file" id="single-file-input" class="file-input" accept="image/*">
                         <button class="btn" onclick="document.getElementById('single-file-input').click()">Choose
                             File</button>
+                        <div id="single-image-preview-container"
+                            style="margin-top:20px; display:none; text-align:center;">
+                            <img id="single-image-preview" src="" alt="Selected Image Preview"
+                                style="max-width:200px; max-height:200px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); margin-bottom:10px;" />
+                            <div id="single-image-filename" style="color:#555; font-size:0.95em;"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -675,6 +681,7 @@
             document.getElementById( 'results' ).innerHTML = '';
             selectedFiles = [];
             updateProcessButton();
+            updateSingleImagePreview();
 
             // Stop camera if switching away from webcam tab
             if ( tab !== 'webcam' && stream ) {
@@ -691,6 +698,7 @@
         document.getElementById( 'single-file-input' ).addEventListener( 'change', function ( e ) {
             selectedFiles = e.target.files;
             updateProcessButton();
+            updateSingleImagePreview();
         } );
 
         // Batch file upload
@@ -721,6 +729,7 @@
                 if ( currentTab === 'single' ) {
                     input.files = e.dataTransfer.files;
                     selectedFiles = e.dataTransfer.files;
+                    updateSingleImagePreview();
                 } else {
                     input.files = e.dataTransfer.files;
                     selectedFiles = e.dataTransfer.files;
@@ -866,6 +875,38 @@
                     console.log( 'Camera permission not granted yet:', error.message );
                 } );
         } );
+
+        function updateSingleImagePreview() {
+            const previewContainer = document.getElementById( 'single-image-preview-container' );
+            const previewImg = document.getElementById( 'single-image-preview' );
+            const filenameDiv = document.getElementById( 'single-image-filename' );
+            if ( currentTab !== 'single' ) {
+                previewContainer.style.display = 'none';
+                previewImg.src = '';
+                filenameDiv.textContent = '';
+                return;
+            }
+            if ( selectedFiles && selectedFiles.length > 0 ) {
+                const file = selectedFiles[ 0 ];
+                if ( file && file.type.startsWith( 'image/' ) ) {
+                    const reader = new FileReader();
+                    reader.onload = function ( e ) {
+                        previewImg.src = e.target.result;
+                        previewContainer.style.display = 'block';
+                        filenameDiv.textContent = file.name;
+                    };
+                    reader.readAsDataURL( file );
+                } else {
+                    previewContainer.style.display = 'none';
+                    previewImg.src = '';
+                    filenameDiv.textContent = '';
+                }
+            } else {
+                previewContainer.style.display = 'none';
+                previewImg.src = '';
+                filenameDiv.textContent = '';
+            }
+        }
     </script>
 </body>
 

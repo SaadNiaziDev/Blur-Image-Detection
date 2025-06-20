@@ -1,3 +1,6 @@
 numpy
 opencv-python
 flask
+pytesseract
+Pillow
+scikit-image

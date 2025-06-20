@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blur Detection Tool</title>
+    <title>ID Card Readability Assessment</title>
     <style>
         * {
             margin: 0;
@@ -397,96 +397,226 @@
                 min-width: 120px;
             }
         }
+
+        /* Score breakdown styles */
+        .score-breakdown {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .score-item:last-child {
+            border-bottom: none;
+        }
+
+        .score-label {
+            font-weight: 600;
+            color: #333;
+            flex: 1;
+        }
+
+        .score-value {
+            font-weight: 700;
+            color: #4facfe;
+            margin: 0 15px;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .score-details {
+            color: #666;
+            font-size: 0.9em;
+            flex: 2;
+            text-align: right;
+        }
+
+        .recommendations-section {
+            background: #e8f4fd;
+            border-left: 4px solid #4facfe;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .recommendations-section h4 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+        }
+
+        .recommendations-section ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .recommendations-section li {
+            margin: 5px 0;
+            color: #34495e;
+        }
+
+        .batch-details {
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔍 Blur Detection Tool</h1>
-            <p>Upload images or capture from camera to detect blur and get detailed analysis</p>
+            <h1>🔬 Enhanced Image Analysis Tool</h1>
+            <p>Advanced OCR, Human Detection & Blur Detection with Camera Support</p>
         </div>
 
         <div class="content">
             <div class="upload-section">
                 <div class="upload-tabs">
-                    <div class="tab active" onclick="switchTab('single')">Single Image</div>
-                    <div class="tab" onclick="switchTab('batch')">Batch Upload</div>
-                    <div class="tab" onclick="switchTab('webcam')">📷 Camera</div>
+                    <div class="tab active" onclick="switchTab('ocr')">📝 OCR Analysis</div>
+                    <div class="tab" onclick="switchTab('human')">👤 Face Detection</div>
+                    <div class="tab" onclick="switchTab('blur')">📸 Blur Detection</div>
                 </div>
 
-                <div id="single-tab" class="tab-content active">
-                    <div class="upload-area" id="single-upload-area">
-                        <div class="upload-icon">📁</div>
-                        <div class="upload-text">Drag and drop an image here or click to browse</div>
-                        <input type="file" id="single-file-input" class="file-input" accept="image/*">
-                        <button class="btn" onclick="document.getElementById('single-file-input').click()">Choose
+                <div id="ocr-tab" class="tab-content active">
+                    <div class="upload-area" id="ocr-upload-area">
+                        <div class="upload-icon">📝</div>
+                        <div class="upload-text">Drag and drop an image for black text OCR analysis on green ID cards or
+                            use camera</div>
+                        <input type="file" id="ocr-file-input" class="file-input" accept="image/*">
+                        <button class="btn" onclick="document.getElementById('ocr-file-input').click()">Choose
                             File</button>
-                        <div id="single-image-preview-container"
-                            style="margin-top:20px; display:none; text-align:center;">
-                            <img id="single-image-preview" src="" alt="Selected Image Preview"
+                        <button class="btn btn-success" onclick="startCamera('ocr')">📷 Use Camera</button>
+                        <div id="ocr-image-preview-container" style="margin-top:20px; display:none; text-align:center;">
+                            <img id="ocr-image-preview" src="" alt="Selected Image Preview"
                                 style="max-width:200px; max-height:200px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); margin-bottom:10px;" />
-                            <div id="single-image-filename" style="color:#555; font-size:0.95em;"></div>
+                            <div id="ocr-image-filename" style="color:#555; font-size:0.95em;"></div>
+                        </div>
+                    </div>
+
+                    <!-- OCR Camera Section -->
+                    <div id="ocr-camera-section" class="camera-section" style="display:none;">
+                        <div class="webcam-container">
+                            <div id="ocr-webcam-status" class="webcam-status status-info">
+                                Click "Start Camera" to capture image for black text OCR analysis on ID cards
+                            </div>
+                            <video id="ocr-webcam-video" class="webcam-video" autoplay playsinline></video>
+                            <canvas id="ocr-webcam-canvas" class="webcam-canvas"></canvas>
+                            <img id="ocr-webcam-preview" class="webcam-preview" style="display: none;">
+                            <div class="webcam-controls">
+                                <button class="btn btn-success" id="ocr-start-camera-btn"
+                                    onclick="startCamera('ocr')">📷 Start Camera</button>
+                                <button class="btn btn-secondary" id="ocr-stop-camera-btn" onclick="stopCamera('ocr')"
+                                    disabled>⏹️ Stop Camera</button>
+                                <button class="btn" id="ocr-capture-btn" onclick="captureImage('ocr')" disabled>📸
+                                    Capture</button>
+                                <button class="btn btn-danger" id="ocr-retake-btn" onclick="retakePhoto('ocr')"
+                                    style="display: none;">🔄 Retake</button>
+                                <button class="btn btn-success" id="ocr-analyze-btn"
+                                    onclick="analyzeCapturedImage('ocr')" style="display: none;">🔍 Analyze Black
+                                    Text</button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div id="batch-tab" class="tab-content">
-                    <div class="upload-area" id="batch-upload-area">
-                        <div class="upload-icon">📁</div>
-                        <div class="upload-text">Drag and drop multiple images here or click to browse</div>
-                        <input type="file" id="batch-file-input" class="file-input" accept="image/*" multiple>
-                        <button class="btn" onclick="document.getElementById('batch-file-input').click()">Choose
-                            Files</button>
+                <div id="human-tab" class="tab-content">
+                    <div class="upload-area" id="human-upload-area">
+                        <div class="upload-icon">👤</div>
+                        <div class="upload-text">Drag and drop an image for face detection or use camera</div>
+                        <input type="file" id="human-file-input" class="file-input" accept="image/*">
+                        <button class="btn" onclick="document.getElementById('human-file-input').click()">Choose
+                            File</button>
+                        <button class="btn btn-success" onclick="startCamera('human')">📷 Use Camera</button>
+                        <div id="human-image-preview-container"
+                            style="margin-top:20px; display:none; text-align:center;">
+                            <img id="human-image-preview" src="" alt="Selected Image Preview"
+                                style="max-width:200px; max-height:200px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); margin-bottom:10px;" />
+                            <div id="human-image-filename" style="color:#555; font-size:0.95em;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Human Detection Camera Section -->
+                    <div id="human-camera-section" class="camera-section" style="display:none;">
+                        <div class="webcam-container">
+                            <div id="human-webcam-status" class="webcam-status status-info">
+                                Click "Start Camera" to capture image for face detection
+                            </div>
+                            <video id="human-webcam-video" class="webcam-video" autoplay playsinline></video>
+                            <canvas id="human-webcam-canvas" class="webcam-canvas"></canvas>
+                            <img id="human-webcam-preview" class="webcam-preview" style="display: none;">
+                            <div class="webcam-controls">
+                                <button class="btn btn-success" id="human-start-camera-btn"
+                                    onclick="startCamera('human')">📷 Start Camera</button>
+                                <button class="btn btn-secondary" id="human-stop-camera-btn"
+                                    onclick="stopCamera('human')" disabled>⏹️ Stop Camera</button>
+                                <button class="btn" id="human-capture-btn" onclick="captureImage('human')" disabled>📸
+                                    Capture</button>
+                                <button class="btn btn-danger" id="human-retake-btn" onclick="retakePhoto('human')"
+                                    style="display: none;">🔄 Retake</button>
+                                <button class="btn btn-success" id="human-analyze-btn"
+                                    onclick="analyzeCapturedImage('human')" style="display: none;">🔍 Detect
+                                    Faces</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div id="webcam-tab" class="tab-content">
-                    <div class="webcam-container">
-                        <div id="webcam-status" class="webcam-status status-info">
-                            Click "Start Camera" to begin capturing
+                <div id="blur-tab" class="tab-content">
+                    <div class="upload-area" id="blur-upload-area">
+                        <div class="upload-icon">📸</div>
+                        <div class="upload-text">Drag and drop an image for blur detection or use camera</div>
+                        <input type="file" id="blur-file-input" class="file-input" accept="image/*">
+                        <button class="btn" onclick="document.getElementById('blur-file-input').click()">Choose
+                            File</button>
+                        <button class="btn btn-success" onclick="startCamera('blur')">📷 Use Camera</button>
+                        <div id="blur-image-preview-container"
+                            style="margin-top:20px; display:none; text-align:center;">
+                            <img id="blur-image-preview" src="" alt="Selected Image Preview"
+                                style="max-width:200px; max-height:200px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); margin-bottom:10px;" />
+                            <div id="blur-image-filename" style="color:#555; font-size:0.95em;"></div>
                         </div>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="camera-select">Select Camera:</label>
-                            <select id="camera-select">
-                                <option value="">Loading cameras...</option>
-                            </select>
-                        </div>
-
-                        <video id="webcam-video" class="webcam-video" autoplay playsinline></video>
-                        <canvas id="webcam-canvas" class="webcam-canvas"></canvas>
-                        <img id="webcam-preview" class="webcam-preview" style="display: none;">
-
-                        <div class="webcam-controls">
-                            <button class="btn btn-success" id="start-camera-btn" onclick="startCamera()">📷 Start
-                                Camera</button>
-                            <button class="btn btn-secondary" id="stop-camera-btn" onclick="stopCamera()" disabled>⏹️
-                                Stop Camera</button>
-                            <button class="btn" id="capture-btn" onclick="captureImage()" disabled>📸 Capture
-                                Photo</button>
-                            <button class="btn btn-danger" id="retake-btn" onclick="retakePhoto()"
-                                style="display: none;">🔄 Retake</button>
-                            <button class="btn btn-success" id="analyze-btn" onclick="analyzeCapturedImage()"
-                                style="display: none;">🔍 Analyze Photo</button>
+                    <!-- Blur Detection Camera Section -->
+                    <div id="blur-camera-section" class="camera-section" style="display:none;">
+                        <div class="webcam-container">
+                            <div id="blur-webcam-status" class="webcam-status status-info">
+                                Click "Start Camera" to capture image for blur detection
+                            </div>
+                            <video id="blur-webcam-video" class="webcam-video" autoplay playsinline></video>
+                            <canvas id="blur-webcam-canvas" class="webcam-canvas"></canvas>
+                            <img id="blur-webcam-preview" class="webcam-preview" style="display: none;">
+                            <div class="webcam-controls">
+                                <button class="btn btn-success" id="blur-start-camera-btn"
+                                    onclick="startCamera('blur')">📷 Start Camera</button>
+                                <button class="btn btn-secondary" id="blur-stop-camera-btn" onclick="stopCamera('blur')"
+                                    disabled>⏹️ Stop Camera</button>
+                                <button class="btn" id="blur-capture-btn" onclick="captureImage('blur')" disabled>📸
+                                    Capture</button>
+                                <button class="btn btn-danger" id="blur-retake-btn" onclick="retakePhoto('blur')"
+                                    style="display: none;">🔄 Retake</button>
+                                <button class="btn btn-success" id="blur-analyze-btn"
+                                    onclick="analyzeCapturedImage('blur')" style="display: none;">🔍 Analyze
+                                    Blur</button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="settings">
-                    <div class="form-group">
-                        <label for="threshold">Blur Threshold:</label>
-                        <input type="number" id="threshold" value="100.0" step="0.1" min="0">
-                        <small>Higher values = more strict blur detection</small>
-                    </div>
-                </div>
-
-                <button class="btn" id="process-btn" onclick="processImages()" disabled>Process Images</button>
+                <button class="btn" id="process-btn" onclick="processImages()" disabled>Analyze Image</button>
             </div>
 
             <div id="loading" class="loading" style="display: none;">
                 <div class="spinner"></div>
-                <p>Processing images...</p>
+                <p>Assessing ID card readability...</p>
             </div>
 
             <div id="results" class="results-section"></div>
@@ -494,38 +624,27 @@
     </div>
 
     <script>
-        let currentTab = 'single';
+        let currentTab = 'ocr';
         let selectedFiles = [];
         let stream = null;
         let capturedImageData = null;
 
         // Camera functionality
-        async function startCamera() {
-            const video = document.getElementById( 'webcam-video' );
-            const status = document.getElementById( 'webcam-status' );
-            const startBtn = document.getElementById( 'start-camera-btn' );
-            const stopBtn = document.getElementById( 'stop-camera-btn' );
-            const captureBtn = document.getElementById( 'capture-btn' );
-            const cameraSelect = document.getElementById( 'camera-select' );
+        async function startCamera( tab ) {
+            // Show camera section for the specific tab
+            document.getElementById( tab + '-camera-section' ).style.display = 'block';
+            document.getElementById( tab + '-upload-area' ).style.display = 'none';
+
+            const video = document.getElementById( tab + '-webcam-video' );
+            const status = document.getElementById( tab + '-webcam-status' );
+            const startBtn = document.getElementById( tab + '-start-camera-btn' );
+            const stopBtn = document.getElementById( tab + '-stop-camera-btn' );
+            const captureBtn = document.getElementById( tab + '-capture-btn' );
 
             try {
-                // Get available cameras
-                const devices = await navigator.mediaDevices.enumerateDevices();
-                const videoDevices = devices.filter( device => device.kind === 'videoinput' );
-
-                // Populate camera select
-                cameraSelect.innerHTML = '';
-                videoDevices.forEach( ( device, index ) => {
-                    const option = document.createElement( 'option' );
-                    option.value = device.deviceId;
-                    option.text = device.label || `Camera ${index + 1}`;
-                    cameraSelect.appendChild( option );
-                } );
-
-                // Get user media with selected camera
+                // Get user media
                 const constraints = {
                     video: {
-                        deviceId: cameraSelect.value ? { exact: cameraSelect.value } : undefined,
                         width: { ideal: 1280 },
                         height: { ideal: 720 }
                     }
@@ -548,12 +667,12 @@
             }
         }
 
-        function stopCamera() {
-            const video = document.getElementById( 'webcam-video' );
-            const status = document.getElementById( 'webcam-status' );
-            const startBtn = document.getElementById( 'start-camera-btn' );
-            const stopBtn = document.getElementById( 'stop-camera-btn' );
-            const captureBtn = document.getElementById( 'capture-btn' );
+        function stopCamera( tab ) {
+            const video = document.getElementById( tab + '-webcam-video' );
+            const status = document.getElementById( tab + '-webcam-status' );
+            const startBtn = document.getElementById( tab + '-start-camera-btn' );
+            const stopBtn = document.getElementById( tab + '-stop-camera-btn' );
+            const captureBtn = document.getElementById( tab + '-capture-btn' );
 
             if ( stream ) {
                 stream.getTracks().forEach( track => track.stop() );
@@ -567,16 +686,20 @@
             startBtn.disabled = false;
             stopBtn.disabled = true;
             captureBtn.disabled = true;
+
+            // Hide camera section and show upload area
+            document.getElementById( tab + '-camera-section' ).style.display = 'none';
+            document.getElementById( tab + '-upload-area' ).style.display = 'block';
         }
 
-        function captureImage() {
-            const video = document.getElementById( 'webcam-video' );
-            const canvas = document.getElementById( 'webcam-canvas' );
-            const preview = document.getElementById( 'webcam-preview' );
-            const status = document.getElementById( 'webcam-status' );
-            const captureBtn = document.getElementById( 'capture-btn' );
-            const retakeBtn = document.getElementById( 'retake-btn' );
-            const analyzeBtn = document.getElementById( 'analyze-btn' );
+        function captureImage( tab ) {
+            const video = document.getElementById( tab + '-webcam-video' );
+            const canvas = document.getElementById( tab + '-webcam-canvas' );
+            const preview = document.getElementById( tab + '-webcam-preview' );
+            const status = document.getElementById( tab + '-webcam-status' );
+            const captureBtn = document.getElementById( tab + '-capture-btn' );
+            const retakeBtn = document.getElementById( tab + '-retake-btn' );
+            const analyzeBtn = document.getElementById( tab + '-analyze-btn' );
 
             // Set canvas size to match video
             canvas.width = video.videoWidth;
@@ -605,13 +728,13 @@
             }, 'image/jpeg', 0.9 );
         }
 
-        function retakePhoto() {
-            const video = document.getElementById( 'webcam-video' );
-            const preview = document.getElementById( 'webcam-preview' );
-            const status = document.getElementById( 'webcam-status' );
-            const captureBtn = document.getElementById( 'capture-btn' );
-            const retakeBtn = document.getElementById( 'retake-btn' );
-            const analyzeBtn = document.getElementById( 'analyze-btn' );
+        function retakePhoto( tab ) {
+            const video = document.getElementById( tab + '-webcam-video' );
+            const preview = document.getElementById( tab + '-webcam-preview' );
+            const status = document.getElementById( tab + '-webcam-status' );
+            const captureBtn = document.getElementById( tab + '-capture-btn' );
+            const retakeBtn = document.getElementById( tab + '-retake-btn' );
+            const analyzeBtn = document.getElementById( tab + '-analyze-btn' );
 
             // Clean up previous image
             if ( preview.src ) {
@@ -631,7 +754,7 @@
             capturedImageData = null;
         }
 
-        function analyzeCapturedImage() {
+        function analyzeCapturedImage( tab ) {
             if ( !capturedImageData ) {
                 displayError( 'No captured image to analyze' );
                 return;
@@ -639,16 +762,14 @@
 
             const loading = document.getElementById( 'loading' );
             const results = document.getElementById( 'results' );
-            const threshold = document.getElementById( 'threshold' ).value;
 
             loading.style.display = 'block';
             results.innerHTML = '';
 
             const formData = new FormData();
-            formData.append( 'threshold', threshold );
             formData.append( 'file', capturedImageData, 'captured_image.jpg' );
 
-            fetch( '/upload', {
+            fetch( '/' + tab + '_analysis', {
                 method: 'POST',
                 body: formData
             } )
@@ -656,7 +777,13 @@
                 .then( data => {
                     loading.style.display = 'none';
                     if ( data.success ) {
-                        displaySingleResult( data );
+                        if ( tab === 'ocr' ) {
+                            displayOCRResult( data );
+                        } else if ( tab === 'human' ) {
+                            displayHumanDetectionResult( data );
+                        } else if ( tab === 'blur' ) {
+                            displayBlurDetectionResult( data );
+                        }
                     } else {
                         displayError( data.error );
                     }
@@ -681,11 +808,21 @@
             document.getElementById( 'results' ).innerHTML = '';
             selectedFiles = [];
             updateProcessButton();
-            updateSingleImagePreview();
+            updateImagePreview();
+
+            // Update process button text based on tab
+            const processBtn = document.getElementById( 'process-btn' );
+            if ( tab === 'ocr' ) {
+                processBtn.textContent = '📝 Analyze Black Text';
+            } else if ( tab === 'human' ) {
+                processBtn.textContent = '👤 Face Detection';
+            } else if ( tab === 'blur' ) {
+                processBtn.textContent = '📸 Blur Detection';
+            }
 
             // Stop camera if switching away from webcam tab
             if ( tab !== 'webcam' && stream ) {
-                stopCamera();
+                stopCamera( tab );
             }
         }
 
@@ -694,198 +831,11 @@
             btn.disabled = selectedFiles.length === 0;
         }
 
-        // Single file upload
-        document.getElementById( 'single-file-input' ).addEventListener( 'change', function ( e ) {
-            selectedFiles = e.target.files;
-            updateProcessButton();
-            updateSingleImagePreview();
-        } );
+        function updateImagePreview() {
+            const previewContainer = document.getElementById( currentTab + '-image-preview-container' );
+            const previewImg = document.getElementById( currentTab + '-image-preview' );
+            const filenameDiv = document.getElementById( currentTab + '-image-filename' );
 
-        // Batch file upload
-        document.getElementById( 'batch-file-input' ).addEventListener( 'change', function ( e ) {
-            selectedFiles = e.target.files;
-            updateProcessButton();
-        } );
-
-        // Drag and drop functionality
-        function setupDragAndDrop( areaId, inputId ) {
-            const area = document.getElementById( areaId );
-            const input = document.getElementById( inputId );
-
-            area.addEventListener( 'dragover', function ( e ) {
-                e.preventDefault();
-                area.classList.add( 'dragover' );
-            } );
-
-            area.addEventListener( 'dragleave', function ( e ) {
-                e.preventDefault();
-                area.classList.remove( 'dragover' );
-            } );
-
-            area.addEventListener( 'drop', function ( e ) {
-                e.preventDefault();
-                area.classList.remove( 'dragover' );
-
-                if ( currentTab === 'single' ) {
-                    input.files = e.dataTransfer.files;
-                    selectedFiles = e.dataTransfer.files;
-                    updateSingleImagePreview();
-                } else {
-                    input.files = e.dataTransfer.files;
-                    selectedFiles = e.dataTransfer.files;
-                }
-                updateProcessButton();
-            } );
-        }
-
-        setupDragAndDrop( 'single-upload-area', 'single-file-input' );
-        setupDragAndDrop( 'batch-upload-area', 'batch-file-input' );
-
-        function processImages() {
-            if ( selectedFiles.length === 0 ) return;
-
-            const loading = document.getElementById( 'loading' );
-            const results = document.getElementById( 'results' );
-            const threshold = document.getElementById( 'threshold' ).value;
-
-            loading.style.display = 'block';
-            results.innerHTML = '';
-
-            const formData = new FormData();
-            formData.append( 'threshold', threshold );
-
-            if ( currentTab === 'single' ) {
-                formData.append( 'file', selectedFiles[ 0 ] );
-
-                fetch( '/upload', {
-                    method: 'POST',
-                    body: formData
-                } )
-                    .then( response => response.json() )
-                    .then( data => {
-                        loading.style.display = 'none';
-                        if ( data.success ) {
-                            displaySingleResult( data );
-                        } else {
-                            displayError( data.error );
-                        }
-                    } )
-                    .catch( error => {
-                        loading.style.display = 'none';
-                        displayError( 'An error occurred while processing the image.' );
-                    } );
-            } else {
-                // Batch upload
-                for ( let file of selectedFiles ) {
-                    formData.append( 'files[]', file );
-                }
-
-                fetch( '/batch_upload', {
-                    method: 'POST',
-                    body: formData
-                } )
-                    .then( response => response.json() )
-                    .then( data => {
-                        loading.style.display = 'none';
-                        if ( data.success ) {
-                            displayBatchResults( data );
-                        } else {
-                            displayError( data.error );
-                        }
-                    } )
-                    .catch( error => {
-                        loading.style.display = 'none';
-                        displayError( 'An error occurred while processing the images.' );
-                    } );
-            }
-        }
-
-        function displaySingleResult( data ) {
-            const results = document.getElementById( 'results' );
-            const statusClass = data.blurry ? 'status-blurry' : 'status-sharp';
-            const statusText = data.blurry ? 'BLURRY' : 'SHARP';
-
-            results.innerHTML = `
-                <div class="result-card">
-                    <div class="result-header">
-                        <div class="result-title">${data.filename}</div>
-                        <div class="result-status ${statusClass}">${statusText}</div>
-                    </div>
-                    <div class="result-score">Blur Score: ${data.score.toFixed( 2 )} (Threshold: ${data.threshold})</div>
-                    <div class="image-comparison">
-                        <div class="image-container">
-                            <img src="${data.original_image}" alt="Original Image">
-                            <div class="image-label">Original Image</div>
-                        </div>
-                        <div class="image-container">
-                            <img src="${data.blur_map}" alt="Blur Map">
-                            <div class="image-label">Blur Detection Map</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function displayBatchResults( data ) {
-            const results = document.getElementById( 'results' );
-            let html = '<div class="result-card"><h3>Batch Results</h3><div class="batch-results">';
-
-            data.results.forEach( result => {
-                if ( result.error ) {
-                    html += `
-                        <div class="batch-item">
-                            <span>${result.filename}</span>
-                            <span class="error">Error: ${result.error}</span>
-                        </div>
-                    `;
-                } else {
-                    const statusClass = result.blurry ? 'status-blurry' : 'status-sharp';
-                    const statusText = result.blurry ? 'BLURRY' : 'SHARP';
-
-                    html += `
-                        <div class="batch-item">
-                            <span>${result.filename}</span>
-                            <div>
-                                <span class="result-status ${statusClass}">${statusText}</span>
-                                <span style="margin-left: 10px; color: #666;">Score: ${result.score.toFixed( 2 )}</span>
-                            </div>
-                        </div>
-                    `;
-                }
-            } );
-
-            html += '</div></div>';
-            results.innerHTML = html;
-        }
-
-        function displayError( message ) {
-            const results = document.getElementById( 'results' );
-            results.innerHTML = `<div class="error">${message}</div>`;
-        }
-
-        // Initialize camera permissions on page load
-        document.addEventListener( 'DOMContentLoaded', function () {
-            // Request camera permissions early
-            navigator.mediaDevices.getUserMedia( { video: true } )
-                .then( stream => {
-                    // Immediately stop the stream - we just wanted to check permissions
-                    stream.getTracks().forEach( track => track.stop() );
-                } )
-                .catch( error => {
-                    console.log( 'Camera permission not granted yet:', error.message );
-                } );
-        } );
-
-        function updateSingleImagePreview() {
-            const previewContainer = document.getElementById( 'single-image-preview-container' );
-            const previewImg = document.getElementById( 'single-image-preview' );
-            const filenameDiv = document.getElementById( 'single-image-filename' );
-            if ( currentTab !== 'single' ) {
-                previewContainer.style.display = 'none';
-                previewImg.src = '';
-                filenameDiv.textContent = '';
-                return;
-            }
             if ( selectedFiles && selectedFiles.length > 0 ) {
                 const file = selectedFiles[ 0 ];
                 if ( file && file.type.startsWith( 'image/' ) ) {
@@ -907,6 +857,315 @@
                 filenameDiv.textContent = '';
             }
         }
+
+        // OCR file upload
+        document.getElementById( 'ocr-file-input' ).addEventListener( 'change', function ( e ) {
+            selectedFiles = e.target.files;
+            updateProcessButton();
+            updateImagePreview();
+        } );
+
+        // Human detection file upload
+        document.getElementById( 'human-file-input' ).addEventListener( 'change', function ( e ) {
+            selectedFiles = e.target.files;
+            updateProcessButton();
+            updateImagePreview();
+        } );
+
+        // Blur detection file upload
+        document.getElementById( 'blur-file-input' ).addEventListener( 'change', function ( e ) {
+            selectedFiles = e.target.files;
+            updateProcessButton();
+            updateImagePreview();
+        } );
+
+        // Drag and drop functionality
+        function setupDragAndDrop( areaId, inputId ) {
+            const area = document.getElementById( areaId );
+            const input = document.getElementById( inputId );
+
+            area.addEventListener( 'dragover', function ( e ) {
+                e.preventDefault();
+                area.classList.add( 'dragover' );
+            } );
+
+            area.addEventListener( 'dragleave', function ( e ) {
+                e.preventDefault();
+                area.classList.remove( 'dragover' );
+            } );
+
+            area.addEventListener( 'drop', function ( e ) {
+                e.preventDefault();
+                area.classList.remove( 'dragover' );
+
+                input.files = e.dataTransfer.files;
+                selectedFiles = e.dataTransfer.files;
+                updateImagePreview();
+                updateProcessButton();
+            } );
+        }
+
+        setupDragAndDrop( 'ocr-upload-area', 'ocr-file-input' );
+        setupDragAndDrop( 'human-upload-area', 'human-file-input' );
+        setupDragAndDrop( 'blur-upload-area', 'blur-file-input' );
+
+        function processImages() {
+            if ( selectedFiles.length === 0 ) return;
+
+            const loading = document.getElementById( 'loading' );
+            const results = document.getElementById( 'results' );
+
+            loading.style.display = 'block';
+            results.innerHTML = '';
+
+            const formData = new FormData();
+
+            if ( currentTab === 'ocr' ) {
+                formData.append( 'file', selectedFiles[ 0 ] );
+
+                fetch( '/ocr_analysis', {
+                    method: 'POST',
+                    body: formData
+                } )
+                    .then( response => response.json() )
+                    .then( data => {
+                        loading.style.display = 'none';
+                        if ( data.success ) {
+                            displayOCRResult( data );
+                        } else {
+                            displayError( data.error );
+                        }
+                    } )
+                    .catch( error => {
+                        loading.style.display = 'none';
+                        displayError( 'An error occurred while processing the image.' );
+                    } );
+            } else if ( currentTab === 'human' ) {
+                formData.append( 'file', selectedFiles[ 0 ] );
+
+                fetch( '/human_detection', {
+                    method: 'POST',
+                    body: formData
+                } )
+                    .then( response => response.json() )
+                    .then( data => {
+                        loading.style.display = 'none';
+                        if ( data.success ) {
+                            displayHumanDetectionResult( data );
+                        } else {
+                            displayError( data.error );
+                        }
+                    } )
+                    .catch( error => {
+                        loading.style.display = 'none';
+                        displayError( 'An error occurred while detecting human presence.' );
+                    } );
+            } else if ( currentTab === 'blur' ) {
+                formData.append( 'file', selectedFiles[ 0 ] );
+
+                fetch( '/blur_detection', {
+                    method: 'POST',
+                    body: formData
+                } )
+                    .then( response => response.json() )
+                    .then( data => {
+                        loading.style.display = 'none';
+                        if ( data.success ) {
+                            displayBlurDetectionResult( data );
+                        } else {
+                            displayError( data.error );
+                        }
+                    } )
+                    .catch( error => {
+                        loading.style.display = 'none';
+                        displayError( 'An error occurred while processing the image.' );
+                    } );
+            }
+        }
+
+        function displayOCRResult( data ) {
+            const results = document.getElementById( 'results' );
+            const analysis = data.results;
+            const statusClass = analysis.score >= 60 ? 'status-sharp' : 'status-blurry';
+            const statusText = analysis.score >= 60 ? 'READABLE' : 'NOT READABLE';
+
+            results.innerHTML = `
+                <div class="result-card">
+                    <div class="result-header">
+                        <div class="result-title">${data.filename}</div>
+                        <div class="result-status ${statusClass}">${statusText}</div>
+                    </div>
+                    <div class="result-score">Black Text OCR Score: ${analysis.score}/100</div>
+                    
+                    <div class="image-comparison">
+                        <div class="image-container">
+                            <img src="${data.original_image}" alt="Original Image" style="max-width: 100%; max-height: 400px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                            <div class="image-label">Original ID Card</div>
+                        </div>
+                        <div class="image-container">
+                            <img src="${analysis.visualization}" alt="Black Text OCR Visualization" style="max-width: 100%; max-height: 400px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                            <div class="image-label">Black Text Detection</div>
+                        </div>
+                    </div>
+                    
+                    <div class="score-breakdown">
+                        <div class="score-item">
+                            <span class="score-label">📝 Black Text Found:</span>
+                            <span class="score-value">${analysis.text_count}</span>
+                            <span class="score-details">Black text elements detected</span>
+                        </div>
+                        <div class="score-item">
+                            <span class="score-label">🌐 Language:</span>
+                            <span class="score-value">-</span>
+                            <span class="score-details">${analysis.language_info}</span>
+                        </div>
+                        <div class="score-item">
+                            <span class="score-label">📊 Confidence:</span>
+                            <span class="score-value">${analysis.confidence}%</span>
+                            <span class="score-details">Black text recognition confidence</span>
+                        </div>
+                    </div>
+                    
+                    <div class="recommendations-section" style="margin-top: 20px;">
+                        <h4>📝 Detected Black Text:</h4>
+                        <p style="margin: 10px 0; color: #34495e; background: #f8f9fa; padding: 10px; border-radius: 5px;">${analysis.detected_text}</p>
+                        <h4>💡 Black Text Analysis Details:</h4>
+                        <p style="margin: 10px 0; color: #34495e;">${analysis.details}</p>
+                        <h4>🎯 ID Card Optimization:</h4>
+                        <ul style="margin: 10px 0; color: #34495e;">
+                            <li>Targets black text on green ID card background</li>
+                            <li>Uses color-based text extraction for accuracy</li>
+                            <li>Optimized for national ID card readability</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayHumanDetectionResult( data ) {
+            const results = document.getElementById( 'results' );
+            const detection = data.results;
+            const statusClass = detection.human_detected ? 'status-sharp' : 'status-blurry';
+            const statusText = detection.human_detected ? 'HUMAN DETECTED' : 'NO HUMAN DETECTED';
+
+            results.innerHTML = `
+                <div class="result-card">
+                    <div class="result-header">
+                        <div class="result-title">${data.filename}</div>
+                        <div class="result-status ${statusClass}">${statusText}</div>
+                    </div>
+                    <div class="result-score">Detection Confidence: ${detection.confidence}/100</div>
+                    
+                    <div class="image-comparison">
+                        <div class="image-container">
+                            <img src="${data.original_image}" alt="Original Image" style="max-width: 100%; max-height: 400px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                            <div class="image-label">Original Image</div>
+                        </div>
+                        <div class="image-container">
+                            <img src="${detection.visualization}" alt="Face Detection Visualization" style="max-width: 100%; max-height: 400px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                            <div class="image-label">Face Detection</div>
+                        </div>
+                    </div>
+                    
+                    <div class="score-breakdown">
+                        <div class="score-item">
+                            <span class="score-label">👤 Face Count:</span>
+                            <span class="score-value">${detection.face_count}</span>
+                            <span class="score-details">Faces detected</span>
+                        </div>
+                        <div class="score-item">
+                            <span class="score-label">📊 Total Detections:</span>
+                            <span class="score-value">${detection.total_detections}</span>
+                            <span class="score-details">Total faces found</span>
+                        </div>
+                    </div>
+                    
+                    <div class="recommendations-section" style="margin-top: 20px;">
+                        <h4>🔍 Detection Details:</h4>
+                        <p style="margin: 10px 0; color: #34495e;">${detection.details}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayBlurDetectionResult( data ) {
+            const results = document.getElementById( 'results' );
+            const analysis = data.results;
+            const statusClass = analysis.score >= 50 ? 'status-sharp' : 'status-blurry';
+            const statusText = analysis.score >= 50 ? 'SHARP' : 'BLURRY';
+
+            results.innerHTML = `
+                <div class="result-card">
+                    <div class="result-header">
+                        <div class="result-title">${data.filename}</div>
+                        <div class="result-status ${statusClass}">${statusText}</div>
+                    </div>
+                    <div class="result-score">Blur Score: ${analysis.score}/100</div>
+                    
+                    <div class="image-comparison">
+                        <div class="image-container">
+                            <img src="${data.original_image}" alt="Original Image" style="max-width: 100%; max-height: 400px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                            <div class="image-label">Original Image</div>
+                        </div>
+                        <div class="image-container">
+                            <img src="${analysis.blur_map}" alt="Blur Map" style="max-width: 100%; max-height: 400px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                            <div class="image-label">Blur Map</div>
+                        </div>
+                    </div>
+                    
+                    <div class="score-breakdown">
+                        <div class="score-item">
+                            <span class="score-label">📊 Laplacian:</span>
+                            <span class="score-value">${analysis.methods.laplacian.toFixed( 1 )}</span>
+                            <span class="score-details">Laplacian variance</span>
+                        </div>
+                        <div class="score-item">
+                            <span class="score-label">📊 Sobel:</span>
+                            <span class="score-value">${analysis.methods.sobel.toFixed( 1 )}</span>
+                            <span class="score-details">Sobel edge detection</span>
+                        </div>
+                        <div class="score-item">
+                            <span class="score-label">📊 FFT:</span>
+                            <span class="score-value">${analysis.methods.fft.toFixed( 1 )}</span>
+                            <span class="score-details">Frequency domain analysis</span>
+                        </div>
+                        <div class="score-item">
+                            <span class="score-label">📊 Gradient:</span>
+                            <span class="score-value">${analysis.methods.gradient.toFixed( 1 )}</span>
+                            <span class="score-details">Gradient magnitude</span>
+                        </div>
+                        <div class="score-item">
+                            <span class="score-label">📊 Edge Density:</span>
+                            <span class="score-value">${analysis.methods.edge_density.toFixed( 1 )}</span>
+                            <span class="score-details">Edge density analysis</span>
+                        </div>
+                    </div>
+                    
+                    <div class="recommendations-section" style="margin-top: 20px;">
+                        <h4>🔍 Analysis Details:</h4>
+                        <p style="margin: 10px 0; color: #34495e;">${analysis.details}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayError( message ) {
+            const results = document.getElementById( 'results' );
+            results.innerHTML = `<div class="error">${message}</div>`;
+        }
+
+        // Initialize camera permissions on page load
+        document.addEventListener( 'DOMContentLoaded', function () {
+            // Request camera permissions early
+            navigator.mediaDevices.getUserMedia( { video: true } )
+                .then( stream => {
+                    // Immediately stop the stream - we just wanted to check permissions
+                    stream.getTracks().forEach( track => track.stop() );
+                } )
+                .catch( error => {
+                    console.log( 'Camera permission not granted yet:', error.message );
+                } );
+        } );
     </script>
 </body>
 

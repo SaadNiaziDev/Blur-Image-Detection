@@ -27,7 +27,7 @@ def encode_image_to_base64(image):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', title="Advanced Image Detection & Analysis Tool")
 
 @app.route('/ocr_analysis', methods=['POST'])
 def ocr_analysis():

@@ -473,23 +473,23 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔬 Enhanced Image Analysis Tool</h1>
-            <p>Advanced OCR, Human Detection & Blur Detection with Camera Support</p>
+            <h1>🔍 Advanced Image Detection & Analysis Tool</h1>
+            <p>Comprehensive Computer Vision Solution: OCR, Face Detection & Blur Analysis with AI/ML</p>
         </div>
 
         <div class="content">
             <div class="upload-section">
                 <div class="upload-tabs">
-                    <div class="tab active" onclick="switchTab('ocr')">📝 OCR Analysis</div>
-                    <div class="tab" onclick="switchTab('human')">👤 Face Detection</div>
-                    <div class="tab" onclick="switchTab('blur')">📸 Blur Detection</div>
+                    <div class="tab active" onclick="switchTab('ocr')">📝 OCR Text Recognition</div>
+                    <div class="tab" onclick="switchTab('human')">👤 Face Detection & Recognition</div>
+                    <div class="tab" onclick="switchTab('blur')">📸 Blur Detection & Quality Analysis</div>
                 </div>
 
                 <div id="ocr-tab" class="tab-content active">
                     <div class="upload-area" id="ocr-upload-area">
                         <div class="upload-icon">📝</div>
-                        <div class="upload-text">Drag and drop an image for black text OCR analysis on green ID cards or
-                            use camera</div>
+                        <div class="upload-text">Computer Vision OCR: Extract text from ID cards, documents & images
+                            with AI-powered text recognition</div>
                         <input type="file" id="ocr-file-input" class="file-input" accept="image/*">
                         <button class="btn" onclick="document.getElementById('ocr-file-input').click()">Choose
                             File</button>
@@ -505,7 +505,8 @@
                     <div id="ocr-camera-section" class="camera-section" style="display:none;">
                         <div class="webcam-container">
                             <div id="ocr-webcam-status" class="webcam-status status-info">
-                                Click "Start Camera" to capture image for black text OCR analysis on ID cards
+                                Real-time Computer Vision OCR: Capture images for AI-powered text recognition and
+                                document processing
                             </div>
                             <video id="ocr-webcam-video" class="webcam-video" autoplay playsinline></video>
                             <canvas id="ocr-webcam-canvas" class="webcam-canvas"></canvas>
@@ -520,8 +521,8 @@
                                 <button class="btn btn-danger" id="ocr-retake-btn" onclick="retakePhoto('ocr')"
                                     style="display: none;">🔄 Retake</button>
                                 <button class="btn btn-success" id="ocr-analyze-btn"
-                                    onclick="analyzeCapturedImage('ocr')" style="display: none;">🔍 Analyze Black
-                                    Text</button>
+                                    onclick="analyzeCapturedImage('ocr')" style="display: none;">🔍 AI Text
+                                    Recognition</button>
                             </div>
                         </div>
                     </div>
@@ -530,7 +531,8 @@
                 <div id="human-tab" class="tab-content">
                     <div class="upload-area" id="human-upload-area">
                         <div class="upload-icon">👤</div>
-                        <div class="upload-text">Drag and drop an image for face detection or use camera</div>
+                        <div class="upload-text">Computer Vision Face Detection: AI-powered human face recognition &
+                            security analysis</div>
                         <input type="file" id="human-file-input" class="file-input" accept="image/*">
                         <button class="btn" onclick="document.getElementById('human-file-input').click()">Choose
                             File</button>
@@ -547,7 +549,8 @@
                     <div id="human-camera-section" class="camera-section" style="display:none;">
                         <div class="webcam-container">
                             <div id="human-webcam-status" class="webcam-status status-info">
-                                Click "Start Camera" to capture image for face detection
+                                Real-time Face Detection: Live computer vision analysis for human presence detection &
+                                security
                             </div>
                             <video id="human-webcam-video" class="webcam-video" autoplay playsinline></video>
                             <canvas id="human-webcam-canvas" class="webcam-canvas"></canvas>
@@ -562,8 +565,8 @@
                                 <button class="btn btn-danger" id="human-retake-btn" onclick="retakePhoto('human')"
                                     style="display: none;">🔄 Retake</button>
                                 <button class="btn btn-success" id="human-analyze-btn"
-                                    onclick="analyzeCapturedImage('human')" style="display: none;">🔍 Detect
-                                    Faces</button>
+                                    onclick="analyzeCapturedImage('human')" style="display: none;">🔍 AI Face
+                                    Detection</button>
                             </div>
                         </div>
                     </div>
@@ -572,7 +575,8 @@
                 <div id="blur-tab" class="tab-content">
                     <div class="upload-area" id="blur-upload-area">
                         <div class="upload-icon">📸</div>
-                        <div class="upload-text">Drag and drop an image for blur detection or use camera</div>
+                        <div class="upload-text">Computer Vision Quality Analysis: Multi-method blur detection & image
+                            sharpness assessment</div>
                         <input type="file" id="blur-file-input" class="file-input" accept="image/*">
                         <button class="btn" onclick="document.getElementById('blur-file-input').click()">Choose
                             File</button>
@@ -589,7 +593,8 @@
                     <div id="blur-camera-section" class="camera-section" style="display:none;">
                         <div class="webcam-container">
                             <div id="blur-webcam-status" class="webcam-status status-info">
-                                Click "Start Camera" to capture image for blur detection
+                                Real-time Quality Analysis: Live computer vision blur detection & image quality
+                                assessment
                             </div>
                             <video id="blur-webcam-video" class="webcam-video" autoplay playsinline></video>
                             <canvas id="blur-webcam-canvas" class="webcam-canvas"></canvas>
@@ -604,8 +609,8 @@
                                 <button class="btn btn-danger" id="blur-retake-btn" onclick="retakePhoto('blur')"
                                     style="display: none;">🔄 Retake</button>
                                 <button class="btn btn-success" id="blur-analyze-btn"
-                                    onclick="analyzeCapturedImage('blur')" style="display: none;">🔍 Analyze
-                                    Blur</button>
+                                    onclick="analyzeCapturedImage('blur')" style="display: none;">🔍 AI Quality
+                                    Analysis</button>
                             </div>
                         </div>
                     </div>
@@ -616,7 +621,7 @@
 
             <div id="loading" class="loading" style="display: none;">
                 <div class="spinner"></div>
-                <p>Assessing ID card readability...</p>
+                <p>Performing advanced computer vision analysis...</p>
             </div>
 
             <div id="results" class="results-section"></div>
@@ -813,11 +818,11 @@
             // Update process button text based on tab
             const processBtn = document.getElementById( 'process-btn' );
             if ( tab === 'ocr' ) {
-                processBtn.textContent = '📝 Analyze Black Text';
+                processBtn.textContent = '🔍 AI Text Recognition';
             } else if ( tab === 'human' ) {
-                processBtn.textContent = '👤 Face Detection';
+                processBtn.textContent = '👤 AI Face Detection';
             } else if ( tab === 'blur' ) {
-                processBtn.textContent = '📸 Blur Detection';
+                processBtn.textContent = '📸 AI Quality Analysis';
             }
 
             // Stop camera if switching away from webcam tab
@@ -995,47 +1000,49 @@
                         <div class="result-title">${data.filename}</div>
                         <div class="result-status ${statusClass}">${statusText}</div>
                     </div>
-                    <div class="result-score">Black Text OCR Score: ${analysis.score}/100</div>
+                    <div class="result-score">AI-Powered OCR Score: ${analysis.score}/100</div>
                     
                     <div class="image-comparison">
                         <div class="image-container">
                             <img src="${data.original_image}" alt="Original Image" style="max-width: 100%; max-height: 400px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <div class="image-label">Original ID Card</div>
+                            <div class="image-label">Original Document</div>
                         </div>
                         <div class="image-container">
-                            <img src="${analysis.visualization}" alt="Black Text OCR Visualization" style="max-width: 100%; max-height: 400px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <div class="image-label">Black Text Detection</div>
+                            <img src="${analysis.visualization}" alt="Computer Vision OCR Analysis" style="max-width: 100%; max-height: 400px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                            <div class="image-label">AI Text Recognition</div>
                         </div>
                     </div>
                     
                     <div class="score-breakdown">
                         <div class="score-item">
-                            <span class="score-label">📝 Black Text Found:</span>
+                            <span class="score-label">📝 Detected Text Elements:</span>
                             <span class="score-value">${analysis.text_count}</span>
-                            <span class="score-details">Black text elements detected</span>
+                            <span class="score-details">Computer vision text detection</span>
                         </div>
                         <div class="score-item">
-                            <span class="score-label">🌐 Language:</span>
+                            <span class="score-label">🌐 Language Detection:</span>
                             <span class="score-value">-</span>
                             <span class="score-details">${analysis.language_info}</span>
                         </div>
                         <div class="score-item">
-                            <span class="score-label">📊 Confidence:</span>
+                            <span class="score-label">📊 AI Confidence:</span>
                             <span class="score-value">${analysis.confidence}%</span>
-                            <span class="score-details">Black text recognition confidence</span>
+                            <span class="score-details">Machine learning recognition accuracy</span>
                         </div>
                     </div>
                     
                     <div class="recommendations-section" style="margin-top: 20px;">
-                        <h4>📝 Detected Black Text:</h4>
+                        <h4>📝 AI-Extracted Text:</h4>
                         <p style="margin: 10px 0; color: #34495e; background: #f8f9fa; padding: 10px; border-radius: 5px;">${analysis.detected_text}</p>
-                        <h4>💡 Black Text Analysis Details:</h4>
+                        <h4>💡 Computer Vision Analysis:</h4>
                         <p style="margin: 10px 0; color: #34495e;">${analysis.details}</p>
-                        <h4>🎯 ID Card Optimization:</h4>
+                        <h4>🎯 Advanced AI Features:</h4>
                         <ul style="margin: 10px 0; color: #34495e;">
-                            <li>Targets black text on green ID card background</li>
-                            <li>Uses color-based text extraction for accuracy</li>
-                            <li>Optimized for national ID card readability</li>
+                            <li>🔍 Multi-language text recognition (English & Urdu)</li>
+                            <li>🎨 Color-based text extraction for ID cards</li>
+                            <li>🤖 AI-powered pattern recognition</li>
+                            <li>📊 Machine learning confidence scoring</li>
+                            <li>🔬 Computer vision text region detection</li>
                         </ul>
                     </div>
                 </div>
@@ -1054,7 +1061,7 @@
                         <div class="result-title">${data.filename}</div>
                         <div class="result-status ${statusClass}">${statusText}</div>
                     </div>
-                    <div class="result-score">Detection Confidence: ${detection.confidence}/100</div>
+                    <div class="result-score">AI Face Detection Confidence: ${detection.confidence}/100</div>
                     
                     <div class="image-comparison">
                         <div class="image-container">
@@ -1062,27 +1069,35 @@
                             <div class="image-label">Original Image</div>
                         </div>
                         <div class="image-container">
-                            <img src="${detection.visualization}" alt="Face Detection Visualization" style="max-width: 100%; max-height: 400px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <div class="image-label">Face Detection</div>
+                            <img src="${detection.visualization}" alt="AI Face Detection Analysis" style="max-width: 100%; max-height: 400px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                            <div class="image-label">Computer Vision Face Detection</div>
                         </div>
                     </div>
                     
                     <div class="score-breakdown">
                         <div class="score-item">
-                            <span class="score-label">👤 Face Count:</span>
+                            <span class="score-label">👤 AI-Detected Faces:</span>
                             <span class="score-value">${detection.face_count}</span>
-                            <span class="score-details">Faces detected</span>
+                            <span class="score-details">Computer vision face recognition</span>
                         </div>
                         <div class="score-item">
-                            <span class="score-label">📊 Total Detections:</span>
-                            <span class="score-value">${detection.total_detections}</span>
-                            <span class="score-details">Total faces found</span>
+                            <span class="score-label">📊 Detection Confidence:</span>
+                            <span class="score-value">${detection.confidence}%</span>
+                            <span class="score-details">Machine learning detection accuracy</span>
                         </div>
                     </div>
                     
                     <div class="recommendations-section" style="margin-top: 20px;">
-                        <h4>🔍 Detection Details:</h4>
+                        <h4>🔍 AI Face Detection Analysis:</h4>
                         <p style="margin: 10px 0; color: #34495e;">${detection.details}</p>
+                        <h4>🎯 Computer Vision Features:</h4>
+                        <ul style="margin: 10px 0; color: #34495e;">
+                            <li>🤖 AI-powered face recognition using Haar Cascades</li>
+                            <li>🔍 Real-time human presence detection</li>
+                            <li>📊 Machine learning confidence scoring</li>
+                            <li>🎯 Bounding box visualization for detected faces</li>
+                            <li>🔬 Advanced computer vision algorithms</li>
+                        </ul>
                     </div>
                 </div>
             `;
@@ -1100,7 +1115,7 @@
                         <div class="result-title">${data.filename}</div>
                         <div class="result-status ${statusClass}">${statusText}</div>
                     </div>
-                    <div class="result-score">Blur Score: ${analysis.score}/100</div>
+                    <div class="result-score">AI Quality Analysis Score: ${analysis.score}/100</div>
                     
                     <div class="image-comparison">
                         <div class="image-container">
@@ -1108,42 +1123,50 @@
                             <div class="image-label">Original Image</div>
                         </div>
                         <div class="image-container">
-                            <img src="${analysis.blur_map}" alt="Blur Map" style="max-width: 100%; max-height: 400px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                            <div class="image-label">Blur Map</div>
+                            <img src="${analysis.blur_map}" alt="AI Quality Analysis Map" style="max-width: 100%; max-height: 400px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                            <div class="image-label">Computer Vision Quality Map</div>
                         </div>
                     </div>
                     
                     <div class="score-breakdown">
                         <div class="score-item">
-                            <span class="score-label">📊 Laplacian:</span>
+                            <span class="score-label">📊 Laplacian Analysis:</span>
                             <span class="score-value">${analysis.methods.laplacian.toFixed( 1 )}</span>
-                            <span class="score-details">Laplacian variance</span>
+                            <span class="score-details">Computer vision edge detection</span>
                         </div>
                         <div class="score-item">
-                            <span class="score-label">📊 Sobel:</span>
+                            <span class="score-label">📊 Sobel Edge Detection:</span>
                             <span class="score-value">${analysis.methods.sobel.toFixed( 1 )}</span>
-                            <span class="score-details">Sobel edge detection</span>
+                            <span class="score-details">AI-powered gradient analysis</span>
                         </div>
                         <div class="score-item">
-                            <span class="score-label">📊 FFT:</span>
+                            <span class="score-label">📊 FFT Frequency Analysis:</span>
                             <span class="score-value">${analysis.methods.fft.toFixed( 1 )}</span>
-                            <span class="score-details">Frequency domain analysis</span>
+                            <span class="score-details">Frequency domain computer vision</span>
                         </div>
                         <div class="score-item">
-                            <span class="score-label">📊 Gradient:</span>
+                            <span class="score-label">📊 Gradient Magnitude:</span>
                             <span class="score-value">${analysis.methods.gradient.toFixed( 1 )}</span>
-                            <span class="score-details">Gradient magnitude</span>
+                            <span class="score-details">Machine learning gradient analysis</span>
                         </div>
                         <div class="score-item">
-                            <span class="score-label">📊 Edge Density:</span>
+                            <span class="score-label">📊 Edge Density Analysis:</span>
                             <span class="score-value">${analysis.methods.edge_density.toFixed( 1 )}</span>
-                            <span class="score-details">Edge density analysis</span>
+                            <span class="score-details">AI edge density computation</span>
                         </div>
                     </div>
                     
                     <div class="recommendations-section" style="margin-top: 20px;">
-                        <h4>🔍 Analysis Details:</h4>
+                        <h4>🔍 AI Quality Analysis Details:</h4>
                         <p style="margin: 10px 0; color: #34495e;">${analysis.details}</p>
+                        <h4>🎯 Advanced Computer Vision Features:</h4>
+                        <ul style="margin: 10px 0; color: #34495e;">
+                            <li>🤖 Multi-method AI blur detection algorithms</li>
+                            <li>🔬 Computer vision frequency domain analysis</li>
+                            <li>📊 Machine learning quality assessment</li>
+                            <li>🎨 Visual blur map generation</li>
+                            <li>⚡ Real-time image quality processing</li>
+                        </ul>
                     </div>
                 </div>
             `;

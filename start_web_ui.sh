@@ -72,7 +72,7 @@ echo ""
 
 # Start the web application
 echo "🌐 Starting Advanced Image Detection Web Interface..."
-echo "   📍 URL: http://localhost:5001"
+echo "   📍 URL: http://localhost:3000"
 echo "   🔧 Press Ctrl+C to stop the server"
 echo ""
 

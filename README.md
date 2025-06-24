@@ -20,7 +20,7 @@ A powerful **multi-modal image analysis platform** that combines **OCR**, **Face
 # Start the interactive web UI
 ./start_web_ui.sh
 
-# Open http://localhost:5001 in your browser
+# Open http://localhost:3000 in your browser
 ```
 
 ### Command Line
@@ -235,7 +235,7 @@ python process.py --batch docs/ --ocr --face --output analysis.json
 import requests
 
 # Upload and analyze
-response = requests.post('http://localhost:5001/api/analyze',
+response = requests.post('http://localhost:3000/api/analyze',
                         files={'image': open('image.jpg', 'rb')},
                         data={'mode': 'all'})
 

@@ -188,6 +188,6 @@ def health_check():
 
 if __name__ == '__main__':
     print("Starting Enhanced Image Analysis Tool...")
-    print("Web UI will be available at: http://localhost:5001")
-    print("Health check: http://localhost:5001/health")
-    app.run(debug=True, host='0.0.0.0', port=5001, threaded=True) 
+    print("Web UI will be available at: http://localhost:3000")
+    print("Health check: http://localhost:3000/health")
+    app.run(debug=True, host='0.0.0.0', port=3000, threaded=True) 

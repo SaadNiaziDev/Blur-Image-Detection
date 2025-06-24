@@ -277,7 +277,7 @@ print(f"Analysis complete: {result}")
 
 ## 🤝 Contributing
 
-We welcome contributions! See our [Contributing Guide](CONTRIBUTING.md) for:
+We welcome contributions! See our contributing guidelines for:
 
 - 🐛 **Bug reports** and fixes
 - ✨ **Feature requests** and implementations
@@ -301,7 +301,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 **Ready to transform your image analysis?**
 
-[🚀 Get Started](#quick-start) • [📖 Documentation](docs/) • [💬 Community](https://github.com/your-repo/discussions)
+[🚀 Get Started](#quick-start) • [📖 Documentation](#core-features)
 
 **🔍 The future of Computer Vision is here!**
 
